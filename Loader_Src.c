@@ -37,7 +37,7 @@ int Read(uint32_t Address, uint32_t Size, uint8_t *Buffer);
  outputs :
                 "HAL_OK" 	    : Operation succeeded
  Info :
- Note : Reference en.DM00403500.pdf STM32CubeProgrammer User Manual
+ Note : Reference en.DM00403500.pdf STM32CubeProgrammer User Manual, ARMKeil AN333
 ********************************************************************************/
 HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
 {
@@ -50,7 +50,7 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
  Inputs :   None
  outputs :  None
  Info :
- Note : Reference en.DM00403500.pdf STM32CubeProgrammer User Manual
+ Note : Reference en.DM00403500.pdf STM32CubeProgrammer User Manual, ARMKeil AN333
 ********************************************************************************/
 uint32_t HAL_GetTick(void)
 {
@@ -72,7 +72,7 @@ uint32_t HAL_GetTick(void)
  Inputs :   None
  outputs :  None
  Info :
- Note : Reference en.DM00403500.pdf STM32CubeProgrammer User Manual
+ Note : Reference en.DM00403500.pdf STM32CubeProgrammer User Manual, ARMKeil AN333
 ********************************************************************************/
 void HAL_Delay(uint32_t Delay)
 {
@@ -97,7 +97,7 @@ void HAL_Delay(uint32_t Delay)
                 buffer 		: Address where to get the data to write
  outputs :      "1" 	    : Operation succeeded
  Info :
- Note : Reference en.DM00403500.pdf STM32CubeProgrammer User Manual
+ Note : Reference en.DM00403500.pdf STM32CubeProgrammer User Manual, ARMKeil AN333
         Mandatory for all types except SRAM and PSRAM
 ********************************************************************************/
 #if defined(W25QXX_WRITE_DIFF)
@@ -245,7 +245,7 @@ int Write(uint32_t Address, uint32_t Size, uint8_t *buffer)
                 EraseEndAddress   : End   of sector
  outputs :                    "1" : Operation succeeded
                               "0" : Operation failure
- Note : Reference en.DM00403500.pdf STM32CubeProgrammer User Manual
+ Note : Reference en.DM00403500.pdf STM32CubeProgrammer User Manual, ARMKeil AN333
         Not Mandatory for SRAM PSRAM and NOR_FLASH
 ********************************************************************************/
 #if defined(W25QXX_WRITE_DIFF)
@@ -317,7 +317,7 @@ int SectorErase(uint32_t EraseStartAddress, uint32_t EraseEndAddress)
  *     
  * outputs   "1" : Operation succeeded
  * 			     "0" : Operation failure
- * Note: Reference en.DM00403500.pdf STM32CubeProgrammer User Manual
+ * Note: Reference en.DM00403500.pdf STM32CubeProgrammer User Manual, ARMKeil AN333
          Not Mandatory for SRAM PSRAM and NOR_FLASH
  ********************************************************************************/
 int MassErase(void)
@@ -337,7 +337,7 @@ int MassErase(void)
                 buffer 		: Address where to get the data to write
  outputs :       "1" 		  : Operation succeeded
                  "0" 		  : Operation failure
- Note : Reference en.DM00403500.pdf STM32CubeProgrammer User Manual
+ Note : Reference en.DM00403500.pdf STM32CubeProgrammer User Manual, ARMKeil AN333
 ********************************************************************************/
 int Read(uint32_t Address, uint32_t Size, uint8_t *Buffer)
 {
