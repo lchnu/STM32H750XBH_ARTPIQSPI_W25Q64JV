@@ -366,13 +366,14 @@ int Read(uint32_t Address, uint32_t Size, uint8_t *Buffer)
  Inputs :       MemoryAddr 	    : Write location
                 RAMBufferAddr 	: RAM Address
                 Size 		        : Length in bytes
- outputs :
-                "1" 		        : Operation succeeded
+ outputs :      "1" 		        : Operation succeeded
  Note : Reference en.DM00403500.pdf STM32CubeProgrammer User Manual
         Not Mandatory
 ********************************************************************************/
 uint64_t Verify(uint32_t MemoryAddr, uint32_t RAMBufferAddr, uint32_t Size, uint32_t missalignement)
 {
+    /* Verify #TODO */
+    Checksum(0x0,0x0,0x0); /*avoding never referenced warning*/
     return 1;
 }
 
@@ -441,19 +442,20 @@ int Init(void)
 
 #if defined(DEBUG_WITH_UART)
 #include <stdio.h>
+#if defined (__CC_ARM)
 #pragma import(__use_no_semihosting)
 void _sys_exit(int x)
 {
     x = x;
 }
-
 struct __FILE
-{
+{ 
     int handle;
 };
-
 FILE __stdout;
-
+#elif defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
+__asm (".global __use_no_semihosting\n\t");
+#endif
 int fputc(int ch, FILE *f)
 {
     HAL_UART_Transmit(&huart4, (uint8_t *)&ch, 1, 0xffffffff);
@@ -462,7 +464,7 @@ int fputc(int ch, FILE *f)
 #endif
 
 
-uint32_t Checksum(uint32_t StartAddress, uint32_t Size, uint32_t InitVal)
+static uint32_t Checksum(uint32_t StartAddress, uint32_t Size, uint32_t InitVal)
 {
     uint8_t missalignementAddress = StartAddress % 4;
     uint8_t missalignementSize = Size;

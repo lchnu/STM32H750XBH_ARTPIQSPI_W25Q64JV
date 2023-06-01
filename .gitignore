@@ -25,3 +25,4 @@
 MDK-ARM/*/*.htm
 MDK-ARM/*/*.build_log.htm
 MDK-ARM/DebugConfig/*
+MDK-ARM/*/*.uvguix.*
