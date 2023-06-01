@@ -46,7 +46,7 @@ extern "C" {
 
 /* Exported macro ------------------------------------------------------------*/
 /* USER CODE BEGIN EM */
-//#define DEBUG_WITH_UART
+#define DEBUG_WITH_UART
 #define W25QXX_WRITE_DIFF
 //#define W25QXX_READ_BY_MEMORY_MAP
 /* USER CODE END EM */
