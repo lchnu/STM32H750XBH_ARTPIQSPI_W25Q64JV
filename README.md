@@ -37,43 +37,43 @@ RT-Thread Studio 2.2.6
 
 ## ST CubeProgrammer中测试
 
-Step1. 选中算法
+**Step 1**. 选中算法
 
 ![image-20230601115440178](README.assets/image-20230601115440178.png)
 
-Step2. 全片擦除
+**Step 2**. 全片擦除
 
 ![image-20230601115533935](README.assets/image-20230601115533935.png)
 
-Step3. 读取0x90000000，确认已擦除
+**Step 3**. 读取0x90000000，确认已擦除
 
 ![image-20230601115618557](README.assets/image-20230601115618557.png)
 
-Step 4. 下载程序
+**Step 4**. 下载程序
 
 由于默认用差分方式下载，所以每个扇区的内容与待写入的程序不同，耗时约10S左右。
 
 ![image-20230601115823597](README.assets/image-20230601115823597.png)
 
-Step 5. 复位开发板，程序成功运行
+**Step 5**. 复位开发板，程序成功运行
 
 ![image-20230601115857964](README.assets/image-20230601115857964.png)
 
 ## RT-Thread Studio中测试
 
-Step 1.在Studio中选中算法
+**Step 1**.在Studio中选中算法
 
 ![image-20230601120011779](README.assets/image-20230601120011779.png)
 
 
 
-Step 2. 在完成上述步骤后，在Studio中不修改程序，直接下载
+**Step 2**. 在完成上述步骤后，在Studio中不修改程序，直接下载
 
 由于程序没有任何变化，所以下载过程会提示扇区内容与待写入数据相同，并没有对扇区有任何擦除和写入操作。
 
 ![image-20230601120129867](README.assets/image-20230601120129867.png)
 
-Step 3. 修改程序的LOG，编译后再次下载。
+**Step 3**. 修改程序的LOG，编译后再次下载。
 
 如，修改如下LOG的最后一个字符
 
@@ -93,8 +93,12 @@ LOG_I("Hello RT-Thread----------xyz3");
 
 ![image-20230601120341498](README.assets/image-20230601120341498.png)
 
-Step 4. 确认在Studio中通过命令行调用STM32 CubeProg下载所花费的时间
+**Step 4.** 确认在Studio中通过命令行调用STM32 CubeProg下载所花费的时间
 
 在串口输出打印的情况下，差分下载约4秒。若关闭串口输出打印，时间约1-2秒。
 
 ![image-20230601120511564](README.assets/image-20230601120511564.png)
+
+**Step 5.** 关闭串口输出，简单修改log字符，下载时间约2秒
+
+![image-20230601121518862](README.assets/image-20230601121518862.png)
