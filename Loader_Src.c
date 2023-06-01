@@ -25,15 +25,33 @@ static uint8_t w25qxx_read_buf[4096];
 
 /* Private functions ---------------------------------------------------------*/
 extern void SystemClock_Config(void);
-
+static uint32_t Checksum(uint32_t StartAddress, uint32_t Size, uint32_t InitVal);
 int Init(void);
 int Read(uint32_t Address, uint32_t Size, uint8_t *Buffer);
 
+/*******************************************************************************
+ Description :
+ Initialization of HAL Tick, Overide default HAL_InitTick function
+ Inputs :
+                TickPriority 	: not used
+ outputs :
+                "HAL_OK" 	    : Operation succeeded
+ Info :
+ Note : Reference en.DM00403500.pdf STM32CubeProgrammer User Manual
+********************************************************************************/
 HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
 {
     return HAL_OK;
 }
 
+/*******************************************************************************
+ Description :
+ Get systick, Overide default HAL_GetTick function
+ Inputs :   None
+ outputs :  None
+ Info :
+ Note : Reference en.DM00403500.pdf STM32CubeProgrammer User Manual
+********************************************************************************/
 uint32_t HAL_GetTick(void)
 {
     static uint32_t ticks = 0U;
@@ -42,25 +60,20 @@ uint32_t HAL_GetTick(void)
      and return auxiliary tick counter value */
     for (i = (SystemCoreClock >> 14U); i > 0U; i--)
     {
-        __NOP();
-        __NOP();
-        __NOP();
-        __NOP();
-        __NOP();
-        __NOP();
-        __NOP();
-        __NOP();
-        __NOP();
-        __NOP();
-        __NOP();
-        __NOP();
+        __NOP();__NOP();__NOP();__NOP();__NOP();__NOP();
+        __NOP();__NOP();__NOP();__NOP();__NOP();__NOP();
     }
     return ++ticks;
 }
 
-/**
- * Override default HAL_InitTick function
- */
+/*******************************************************************************
+ Description :
+ HAL Delay 1 millisecond, Overide default HAL_Delay function
+ Inputs :   None
+ outputs :  None
+ Info :
+ Note : Reference en.DM00403500.pdf STM32CubeProgrammer User Manual
+********************************************************************************/
 void HAL_Delay(uint32_t Delay)
 {
     uint32_t tickstart = HAL_GetTick();
@@ -79,14 +92,13 @@ void HAL_Delay(uint32_t Delay)
 /*******************************************************************************
  Description :
  Write data to the device
- Inputs :
-                Address 	: Write location
+ Inputs :       Address 	: Write location
                 Size 		  : Length in bytes
                 buffer 		: Address where to get the data to write
- outputs :
-                "1" 	        : Operation succeeded
+ outputs :      "1" 	    : Operation succeeded
  Info :
- Note : Mandatory for all types except SRAM and PSRAM
+ Note : Reference en.DM00403500.pdf STM32CubeProgrammer User Manual
+        Mandatory for all types except SRAM and PSRAM
 ********************************************************************************/
 #if defined(W25QXX_WRITE_DIFF)
 int Write(uint32_t Address, uint32_t Size, uint8_t *buffer)
@@ -229,13 +241,12 @@ int Write(uint32_t Address, uint32_t Size, uint8_t *buffer)
 /*******************************************************************************
  Description :
  Erase a full sector in the device
- Inputs :
-                EraseStartAddress	: Start of sector
+ Inputs :       EraseStartAddress	: Start of sector
                 EraseEndAddress   : End   of sector
- outputs :
-                "1" : Operation succeeded
-                "0" : Operation failure
- Note : Not Mandatory for SRAM PSRAM and NOR_FLASH
+ outputs :                    "1" : Operation succeeded
+                              "0" : Operation failure
+ Note : Reference en.DM00403500.pdf STM32CubeProgrammer User Manual
+        Not Mandatory for SRAM PSRAM and NOR_FLASH
 ********************************************************************************/
 #if defined(W25QXX_WRITE_DIFF)
 int SectorErase(uint32_t EraseStartAddress, uint32_t EraseEndAddress)
@@ -244,7 +255,8 @@ int SectorErase(uint32_t EraseStartAddress, uint32_t EraseEndAddress)
 #if defined(DEBUG_WITH_UART)
     printf("Erase from 0x%x to 0x%x\r\n", EraseStartAddress, EraseEndAddress);
 #endif
-    if (EraseEndAddress == EraseStartAddress)
+    /*Choose sectors in CubePro, EraseEndAddress and EraseStartAddress are the same*/
+    if (EraseEndAddress == EraseStartAddress)   
     {
         BlockAddr = EraseStartAddress & 0x0FFFFFFF;
         W25QXX_SectorErase(BlockAddr);
@@ -252,11 +264,11 @@ int SectorErase(uint32_t EraseStartAddress, uint32_t EraseEndAddress)
     }
     else
     {
-        secs_diff_wr_flag = 1;
-    }
 #if defined(DEBUG_WITH_UART)
-    printf("---Erasing Sectors is not actually performed\r\n");
+        printf("---Erasing Sectors is not actually performed\r\n");
 #endif
+        secs_diff_wr_flag = 1; /* allow differential write*/
+    }
     return 1;
 }
 #else
@@ -301,32 +313,31 @@ int SectorErase(uint32_t EraseStartAddress, uint32_t EraseEndAddress)
 /*******************************************************************************
  * Description :
  * Erase a full sector in the device
- * Inputs    :
- *     None
- * outputs   :
- *               "1" : Operation succeeded
- * 			         "0" : Operation failure
- * Note: Not Mandatory for SRAM PSRAM and NOR_FLASH
+ * Inputs        :   None
+ *     
+ * outputs   "1" : Operation succeeded
+ * 			     "0" : Operation failure
+ * Note: Reference en.DM00403500.pdf STM32CubeProgrammer User Manual
+         Not Mandatory for SRAM PSRAM and NOR_FLASH
  ********************************************************************************/
 int MassErase(void)
 {
 #if defined(DEBUG_WITH_UART)
     printf("Mass Chip Erase\r\n");
 #endif
+    W25QXX_ChipErase();
     return 1;
 }
 
 /*******************************************************************************
  Description :
  Read data from the device
- Inputs :
-                Address 	: Read location
+ Inputs :       Address 	: Read location
                 Size 		  : Length in bytes
                 buffer 		: Address where to get the data to write
- outputs :
-                "1" 		: Operation succeeded
-                "0" 		: Operation failure
- Note : Not Mandatory
+ outputs :       "1" 		  : Operation succeeded
+                 "0" 		  : Operation failure
+ Note : Reference en.DM00403500.pdf STM32CubeProgrammer User Manual
 ********************************************************************************/
 int Read(uint32_t Address, uint32_t Size, uint8_t *Buffer)
 {
@@ -352,15 +363,14 @@ int Read(uint32_t Address, uint32_t Size, uint8_t *Buffer)
 /*******************************************************************************
  Description :
  Verify the data
- Inputs :
-                MemoryAddr 	: Write location
+ Inputs :       MemoryAddr 	    : Write location
                 RAMBufferAddr 	: RAM Address
-                Size 		: Length in bytes
+                Size 		        : Length in bytes
  outputs :
-                "0" 		: Operation succeeded
- Note : Not Mandatory
+                "1" 		        : Operation succeeded
+ Note : Reference en.DM00403500.pdf STM32CubeProgrammer User Manual
+        Not Mandatory
 ********************************************************************************/
-uint32_t Checksum(uint32_t StartAddress, uint32_t Size, uint32_t InitVal);
 uint64_t Verify(uint32_t MemoryAddr, uint32_t RAMBufferAddr, uint32_t Size, uint32_t missalignement)
 {
     return 1;
@@ -369,11 +379,10 @@ uint64_t Verify(uint32_t MemoryAddr, uint32_t RAMBufferAddr, uint32_t Size, uint
 /*******************************************************************************
  Description :
  System initialization
- Inputs 	:
-                 None
- outputs 	:
-                "1" 		: Operation succeeded
+ Inputs 	:     None
+ outputs 	:     "1" 		: Operation succeeded
                 "0" 		: Operation failure
+ Note : Reference en.DM00403500.pdf STM32CubeProgrammer User Manual
 ********************************************************************************/
 int Init(void)
 {
@@ -452,6 +461,7 @@ int fputc(int ch, FILE *f)
 }
 #endif
 
+
 uint32_t Checksum(uint32_t StartAddress, uint32_t Size, uint32_t InitVal)
 {
     uint8_t missalignementAddress = StartAddress % 4;
@@ -516,6 +526,5 @@ uint32_t Checksum(uint32_t StartAddress, uint32_t Size, uint32_t InitVal)
         }
         StartAddress += 4;
     }
-
     return (InitVal);
 }
