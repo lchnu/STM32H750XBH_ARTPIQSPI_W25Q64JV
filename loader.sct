@@ -1,0 +1,22 @@
+;FLASH_LOADER 0x24040004 PI   ; FlashLoader Functions
+;FLASH_LOADER 0x20000004 PI
+FLASH_LOADER 0x24000004 PI
+{
+  PrgCode +0           ; Code
+  {
+    * (+RO)
+  }
+  PrgData +0           ; Data
+  {
+    * (+RW,+ZI)
+  }
+}
+
+DEVICE_INFO +0               ; Device Info
+{
+  DevInfo +0           ; Info structure
+  {
+    dev_inf.o
+  }
+}
+
